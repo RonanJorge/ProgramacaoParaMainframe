@@ -14,12 +14,9 @@
        SELECT ARQCLI ASSIGN TO DISK
                     ORGANIZATION IS INDEXED
                     ACCESS MODE  IS DYNAMIC
-                    RECORD KEY   IS CLI-TP
 					RECORD KEY   IS CLI-CPF
                     FILE STATUS  IS ST-ERRO
 					ALTERNATE RECORD KEY IS CLI-NOME
-                                   WITH DUPLICATES
-                    ALTERNATE RECORD KEY IS CLI-FANTASIA
                                    WITH DUPLICATES.
       *
       *-----------------------------------------------------------------
@@ -123,7 +120,7 @@
                LINE 06  COLUMN 25  PIC X(01)
                USING  CLI-TP.
            05  TCLI-CPF
-               LINE 07  COLUMN 25  PIC 9(14)
+               LINE 07  COLUMN 25  PIC 99999999999999
                USING  CLI-CPF.
            05  TCLI-NOME
                LINE 08  COLUMN 25  PIC X(30)
@@ -133,7 +130,7 @@
                USING  CLI-FANTASIA.
            05  TCLI-DDD
                LINE 10  COLUMN 25  PIC 9(02)
-               USING  TCLI-DDD.
+               USING  CLI-DDD.
            05  TCLI-NUMTEL
                LINE 11  COLUMN 25  PIC 9(09)
                USING  CLI-NUMTEL.
@@ -148,9 +145,9 @@
                USING  CLI-CONTATO.
            05  TCLI-NUM-LOGR
                LINE 15  COLUMN 25  PIC 9(05)
-               USING  TCLI-NUM-LOGR.
+               USING  CLI-NUM-LOGR.
            05  TCLI-COMPL-LOGR
-               LINE 16  COLUMN 25  PIC 9(09)
+               LINE 16  COLUMN 25  PIC X(12)
                USING  CLI-COMPL-LOGR.
 			   
 			   
@@ -225,18 +222,17 @@
                       PERFORM ROT-MENS THRU ROT-MENS-FIM
                       GO TO INC-OP0
                ELSE
-                      MOVE "ERRO NA ABERTURA DO ARQUIVO CLIENTE" 
-															TO MENS
+                      MOVE "ERRO NA ABERT. DO ARQUIVO CLIENTE" TO MENS
                       PERFORM ROT-MENS THRU ROT-MENS-FIM
                       GO TO ROT-FIM
            ELSE
                     NEXT SENTENCE.
-       R1.
+       INC-001.
                 MOVE SPACES TO CLI-TP CLI-NOME CLI-FANTASIA CLI-EMAIL.
                 MOVE SPACES TO CLI-CEP CLI-CONTATO CLI-COMPL-LOGR. 
                 MOVE ZEROS  TO CLI-CPF CLI-DDD CLI-NUMTEL CLI-NUM-LOGR.
                 DISPLAY TELA01.
-	   R2.
+	   INC-002.
                 ACCEPT TCLI-TP
                 ACCEPT W-ACT FROM ESCAPE KEY
                 IF W-ACT = 02
@@ -245,22 +241,22 @@
                 IF CLI-TP = SPACES 
                    MOVE "*** TIPO INVALIDO ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R2.
-	   R3.
+                   GO TO INC-002.
+	   INC-003.
                 ACCEPT TCLI-CPF
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R2.
+                IF W-ACT = 02 GO TO INC-002.
                 IF CLI-CPF = ZEROS 
                    MOVE "*** CPF INVALIDO ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R3.
+                   GO TO INC-003.
        
        LER-CPF01.
                 MOVE 0 TO W-SEL
                 READ ARQCLI
                 IF ST-ERRO NOT = "23"
                    IF ST-ERRO = "00"
-                      PERFORM R6A THRU R6B
+      *                PERFORM INC-006A THRU INC-006B
                       DISPLAY TELA01
                       MOVE "*** CPF JA CADASTRADO ***" TO MENS
                       PERFORM ROT-MENS THRU ROT-MENS-FIM
@@ -272,136 +268,89 @@
                       GO TO ROT-FIM
                 ELSE
                    NEXT SENTENCE.
-       R4.
+       INC-004.
                 ACCEPT TCLI-NOME
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R3.
+                IF W-ACT = 02 GO TO INC-003.
                 IF CLI-NOME = SPACES 
                    MOVE "*** INSIRA O NOME DO CLIENTE ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R4.
-	   R5.
+                   GO TO INC-004.
+	   INC-005.
                 ACCEPT TCLI-FANTASIA
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R4.
+                IF W-ACT = 02 GO TO INC-004.
                 IF CLI-FANTASIA = SPACES 
                    MOVE "*** INSIRA O NOME FANTASIA ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R5.
-	   R6.
+                   GO TO INC-005.
+	   INC-006.
                 ACCEPT TCLI-DDD
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R5.
+                IF W-ACT = 02 GO TO INC-005.
                 IF CLI-DDD = ZEROS 
                    MOVE "*** INSIRA O DDD ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R6.
-	   R7.
+                   GO TO INC-006.
+	   INC-007.
                 ACCEPT TCLI-NUMTEL
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R6.
+                IF W-ACT = 02 GO TO INC-006.
                 IF CLI-NUMTEL = ZEROS 
                    MOVE "*** INSIRA O TELEFONE ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R7.
-	   R8.
+                   GO TO INC-007.
+	   INC-008.
                 ACCEPT TCLI-EMAIL
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R7.
+                IF W-ACT = 02 GO TO INC-007.
                 IF CLI-EMAIL = SPACES 
                    MOVE "*** INSIRA UM EMAIL ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R8.
-	   R9.
+                   GO TO INC-008.
+	   INC-009.
                 ACCEPT TCLI-CEP
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R8.
+                IF W-ACT = 02 GO TO INC-008.
                 IF CLI-CEP = SPACES 
                    MOVE "*** INSIRA O CEP ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R9.
-	   R10.
+                   GO TO INC-009.
+	   INC-010.
                 ACCEPT TCLI-CONTATO
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R10.
+                IF W-ACT = 02 GO TO INC-009.
                 IF CLI-CONTATO = SPACES 
                    MOVE "*** INSIRA UM CONTATO ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R10.
-	   R11.
+                   GO TO INC-010.
+	   INC-011.
                 ACCEPT TCLI-NUM-LOGR
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R10.
+                IF W-ACT = 02 GO TO INC-010.
                 IF CLI-NUM-LOGR = ZEROS 
                    MOVE "*** INSIRA O NUMERO DO LOGR. ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R11.
-	   R12.
+                   GO TO INC-011.
+	   INC-012.
                 ACCEPT TCLI-COMPL-LOGR
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R11.
-		    
-			
-			*FAZER O W-SEL DO R6B ABAIXO*
-				
-	   R3.
-                ACCEPT TCEP-NOME
-                ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R2.
-                IF CEP-NOME = SPACES 
-                   MOVE "LOGRA. DEVE SER DIFERENTE DE BRANCOS" TO MENS
-                   PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R3.
-				  
-       R4.
-                ACCEPT TCEP-BAIRRO
-                ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R3.
-                IF CEP-BAIRRO = SPACES
-                   MOVE "BAIRRO DEVE SER DIFERENTE DE BRANCOS" TO MENS
-                   PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R4.
-       R5.
-                ACCEPT TCEP-CIDADE
-                ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R4.
-                IF CEP-CIDADE = SPACES
-                   MOVE "CIDADE DEVER DIFERENTE DE BRANCO" TO MENS
-                   PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R5.
-				
-       R6.
-				DISPLAY FTELA2
-                ACCEPT TCEP-UF
-                ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 01 GO TO R5.
-       R6A.
-               MOVE 1 TO IND.
-       R6B.
-               MOVE TABUF (IND) TO TXUF
-               IF CEP-UF NOT = UF-SIGLA
-                      ADD 1 TO IND
-                      IF IND > 27
-                         MOVE "UF NAO EXISTE" TO MENS
-                         PERFORM ROT-MENS THRU ROT-MENS-FIM
-                         GO TO R6
-                      ELSE
-                         GO TO R6B
-               ELSE
-                     DISPLAY TUF-TEXTO.
-      *
-                IF W-SEL = 1
-                              GO TO ALT-OPC. 
-       INC-OPC.
+                IF W-ACT = 02 GO TO INC-011.
+		
+	   
+      * 
+				IF W-SEL = 1
+								GO TO ALT-OPC. 
+	   INC-OPC.
                 MOVE "S" TO W-OPCAO
                 DISPLAY (23, 40) "DADOS OK (S/N) : ".
                 ACCEPT (23, 57) W-OPCAO WITH UPDATE
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R4.
+				IF W-ACT = 02 GO TO INC-012.
                 IF W-OPCAO = "N" OR "n"
                    MOVE "* DADOS RECUSADOS PELO OPERADOR *" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R1.
+                   GO TO INC-001.
                 IF W-OPCAO NOT = "S" AND "s"
                    MOVE "*** DIGITE APENAS S=SIM e N=NAO ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
@@ -411,14 +360,13 @@
                 IF ST-ERRO = "00" OR "02"
                       MOVE "*** DADOS GRAVADOS *** " TO MENS
                       PERFORM ROT-MENS THRU ROT-MENS-FIM
-                      GO TO R1.
+                      GO TO INC-001.
                 IF ST-ERRO = "22"
                       MOVE "*** NOTA JA EXISTE ***       " TO MENS
                       PERFORM ROT-MENS THRU ROT-MENS-FIM
-                      GO TO R1
+                      GO TO INC-001
                 ELSE
-                      MOVE "ERRO NA GRAVACAO DO ARQUIVO DE NOTAS"
-                                                       TO MENS
+                      MOVE "ERRO NA GRAVACAO DO ARQ. DE NOTAS" TO MENS
                       PERFORM ROT-MENS THRU ROT-MENS-FIM
                       GO TO ROT-FIM.
       *
@@ -437,9 +385,9 @@
                 DISPLAY (23, 12) MENS
                 IF W-ACT = 02
                    MOVE 02 TO W-SEL
-                   GO TO R1.
+                   GO TO INC-001.
                 IF W-ACT = 03
-                   GO TO R3.
+                   GO TO INC-004.
       *
        EXC-OPC.
                 DISPLAY (23, 40) "EXCLUIR   (S/N) : ".
@@ -447,7 +395,7 @@
                 IF W-OPCAO = "N" OR "n"
                    MOVE "*** REGISTRO NAO EXCLUIDO ***" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R1.
+                   GO TO INC-001.
                 IF W-OPCAO NOT = "S" AND "s"
                    MOVE "* DIGITE APENAS S=SIM  e  N=NAO *" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
@@ -457,7 +405,7 @@
                 IF ST-ERRO = "00"
                    MOVE "*** REGISTRO EXCLUIDO ***        " TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R1.
+                   GO TO INC-001.
                 MOVE "ERRO NA EXCLUSAO DO REGISTRO "   TO MENS
                 PERFORM ROT-MENS THRU ROT-MENS-FIM
                 GO TO ROT-FIM.
@@ -466,11 +414,11 @@
                 DISPLAY (23, 40) "ALTERAR  (S/N) : ".
                 ACCEPT (23, 57) W-OPCAO
                 ACCEPT W-ACT FROM ESCAPE KEY
-                IF W-ACT = 02 GO TO R4.
+                IF W-ACT = 02 GO TO INC-004.
                 IF W-OPCAO = "N" OR "n"
                    MOVE "*** INFORMACOES NAO ALTERADAS *** " TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R1.
+                   GO TO INC-001.
                 IF W-OPCAO NOT = "S" AND "s"
                    MOVE "* DIGITE APENAS S=SIM  e  N=NAO *" TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
@@ -480,7 +428,7 @@
                 IF ST-ERRO = "00" OR "02"
                    MOVE "*** REGISTRO ALTERADO ***         " TO MENS
                    PERFORM ROT-MENS THRU ROT-MENS-FIM
-                   GO TO R1.
+                   GO TO INC-001.
                 MOVE "ERRO NA ALTERACAO DO REGISTRO NOTAS"   TO MENS
                 PERFORM ROT-MENS THRU ROT-MENS-FIM
                 GO TO ROT-FIM.
