@@ -1,10 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. CONS001.
 	     ****AUTHOR RONAN FELIPE JORGE 
-      **************************************************
-      * CONSULTA DE CEP *
-      **************************************************
-      *----------------------------------------------------------------
+      *
+      ************ CONSULTA DE CEP *********************
+      ***********
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        SPECIAL-NAMES.
@@ -20,7 +19,7 @@
                     ALTERNATE RECORD KEY IS CEP-NOME
                                    WITH DUPLICATES.
       *
-      *-----------------------------------------------------------------
+      ***********
        DATA DIVISION.
        FILE SECTION.
       *
@@ -47,10 +46,8 @@
        01 CONLIN          PIC 9(03) VALUE 001.
        01 CEPENTR      PIC 9(09) VALUE ZEROS.
        01 LOGRENTR    PIC X(30) VALUE SPACES.
-      *-----------------------------------------------------------------
+      
       *
-      *************************
-      * REPORT SECTION *
       *************************
       *
        01 DET2.
@@ -60,11 +57,9 @@
           03 DETLOGRA  PIC X(30) VALUE SPACES.
           03 FILLER    PIC X(02) VALUE SPACES.
           03 DETBAIRRO PIC X(20) VALUE SPACES.
-      *
+      
+      * TELAS
       ******************
-      * ROTINA DE TELA *
-      ******************
-      *
        SCREEN SECTION.
 
        01  TELACEP.
@@ -85,7 +80,9 @@
            05  TLOGRENTR
                LINE 06  COLUMN 13  PIC X(30)
                USING  LOGRENTR.
-      *-----------------------------------------------------------------
+     
+      * PROCEDURES
+      ********************
        PROCEDURE DIVISION.
        INICIO.
       *
@@ -195,9 +192,7 @@
                   PERFORM ROT-MENS THRU ROT-MENS-FIM
                   GO TO NOV-SOL.
       *
-      **********************
-      * ROTINA DE FIM      *
-      **********************
+      ****** ROTINA DE FIM ******
       *
        ROT-FIM.
            DISPLAY (01 01) ERASE.
@@ -207,9 +202,7 @@
        ROT-FIM3.
            STOP RUN.
       *
-      **********************
-      * ROTINA DE MENSAGEM *
-      **********************
+      ****** ROTINA DE MENSAGEM *******
       *
        ROT-MENS.
            MOVE ZEROS TO W-CONT.
@@ -224,6 +217,5 @@
        ROT-MENS-FIM.
            EXIT.
        FIM-ROT-MENS.
-      *
-
-      *---------------------*** FIM DE PROGRAMA ***--------------------*
+	   
+      **** FIM DE PROGRAMA ****

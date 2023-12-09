@@ -87,13 +87,13 @@
                VALUE  "DE CEP=================================".
            05  LINE 08  COLUMN 01 
                VALUE  "        CEP :".
-           05  LINE 10  COLUMN 01 
+           05  LINE 09  COLUMN 01 
                VALUE  "   ENDERECO :".
-           05  LINE 12  COLUMN 01 
+           05  LINE 10  COLUMN 01 
                VALUE  "     BAIRRO :".
-           05  LINE 14  COLUMN 01 
+           05  LINE 11  COLUMN 01 
                VALUE  "     CIDADE :".
-           05  LINE 16  COLUMN 01 
+           05  LINE 12  COLUMN 01 
                VALUE  "         UF :".
            05  LINE 23  COLUMN 01 
                VALUE  " MENSAGEM :".
@@ -101,19 +101,19 @@
                LINE 08  COLUMN 15  PIC 99999.999
                USING  CEP-NUM.
            05  TCEP-NOME
-               LINE 10  COLUMN 15  PIC X(35)
+               LINE 09  COLUMN 15  PIC X(35)
                USING  CEP-NOME.
            05  TCEP-BAIRRO
-               LINE 12  COLUMN 15  PIC X(20)
+               LINE 10  COLUMN 15  PIC X(20)
                USING  CEP-BAIRRO.
            05  TCEP-CIDADE
-               LINE 14  COLUMN 15  PIC X(20)
+               LINE 11  COLUMN 15  PIC X(20)
                USING  CEP-CIDADE.
            05  TCEP-UF
-               LINE 16  COLUMN 15  PIC X(02)
+               LINE 12  COLUMN 15  PIC X(02)
                USING  CEP-UF.
            05  TUF-TEXTO
-               LINE 16  COLUMN 18  PIC X(20)
+               LINE 12  COLUMN 18  PIC X(20)
                USING  UF-TEXTO.
 	   01  FTELA2.
            05  LINE 06  COLUMN 31 
@@ -301,9 +301,7 @@
                       PERFORM ROT-MENS THRU ROT-MENS-FIM
                       GO TO ROT-FIM.
       *
-      *****************************************
-      * ROTINA DE CONSULTA/ALTERACAO/EXCLUSAO *
-      *****************************************
+      ****** ROTINA DE CONSULTA/ALTERACAO/EXCLUSAO DE CEP *******
       *
        ACE-001.
                 DISPLAY (23, 12)
@@ -340,7 +338,7 @@
                 MOVE "ERRO NA EXCLUSAO DO REGISTRO "   TO MENS
                 PERFORM ROT-MENS THRU ROT-MENS-FIM
                 GO TO ROT-FIM.
-      *
+      **********
        ALT-OPC.
                 DISPLAY (23, 40) "ALTERAR  (S/N) : ".
                 ACCEPT (23, 57) W-OPCAO
@@ -364,9 +362,7 @@
                 PERFORM ROT-MENS THRU ROT-MENS-FIM
                 GO TO ROT-FIM.
       *
-      **********************
-      * ROTINA DE FIM      *
-      **********************
+      ***** ROTINA DE FIM *****
       *
        ROT-FIM.
                 DISPLAY (01, 01) ERASE
@@ -377,9 +373,7 @@
        ROT-FIMS.
                 STOP RUN.
       *
-      **********************
-      * ROTINA DE MENSAGEM *
-      **********************
+      **** ROTINA DE MENSAGEM *****
       *
        ROT-MENS.
                 MOVE ZEROS TO W-CONT.
